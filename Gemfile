@@ -20,6 +20,7 @@ gem 'redis-objects'
 gem 'connection_pool'
 gem 'pry'
 gem 'mysql2'
+gem 'rest-client'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

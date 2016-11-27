@@ -1,4 +1,7 @@
 class RedisSetsController < ApplicationController
+  UUID_REGEXP = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+  before_filter :validate_uuid?, only: [:update, :show, :destroy]
 
   def index
   	render :json => RedisSet.all.map(&:as_a_json)
@@ -6,8 +9,9 @@ class RedisSetsController < ApplicationController
 
   def update
     @set = RedisSet.find(params[:id])
+
     @set.add_members(my_set_params[:members])
-    
+
   	render :json => @set.as_a_json
   end
 
@@ -34,6 +38,10 @@ class RedisSetsController < ApplicationController
   end
 
   private
+
+  def validate_uuid?
+    params[:id].match(UUID_REGEXP)
+  end
 
   def my_set_params
     params.require(:redis_set).permit(:id, :members => [])
