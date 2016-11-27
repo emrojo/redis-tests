@@ -10,9 +10,11 @@ class RedisSetsController < ApplicationController
   def update
     @set = RedisSet.find(params[:id])
 
-    @set.add_members(my_set_params[:members])
-
-  	render :json => @set.as_a_json
+    if @set.add_members(my_set_params[:members])
+      render :json => @set.as_a_json
+    else
+      render :nothing => true, :status => 400
+    end
   end
 
   def show
@@ -32,9 +34,12 @@ class RedisSetsController < ApplicationController
   def create
     @set = RedisSet.create!
     @set.redis_object.clear
-    @set.add_members(my_set_params[:members])
 
-    render :json => @set.as_a_json
+    if @set.add_members(my_set_params[:members])
+      render :json => @set.as_a_json
+    else
+      render :nothing => true, :status => 400
+    end
   end
 
   private

@@ -19,7 +19,7 @@ class RedisSet < ActiveRecord::Base
   end
 
   def current_members
-    redis_object.to_a.each do |id|
+    redis_object.to_a.map do |id|
       Biomaterial.find_by_id(id)
     end
   end
